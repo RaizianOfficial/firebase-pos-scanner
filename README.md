@@ -1,4 +1,4 @@
-# 🚀 AI Barcode Scanner POS System (No Hardware Needed)
+# 🚀 FIREBASE POS SCANNER (No Hardware Needed)
 
 A fast, mobile-first **Point of Sale (POS)** system with barcode scanning — built using **Next.js + Firebase**.
 
@@ -47,7 +47,7 @@ All from your phone. No expensive machines needed.
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/raizianofficial/ai-barcode-billing-system.git
+git clone https://github.com/raizianofficial/firebase-pos-scanner.git
 cd YOUR_REPO_NAME
 npm install
 npm run dev
