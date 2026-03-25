@@ -37,7 +37,7 @@ const Scanner = dynamic(() => import("@/components/Scanner"), { ssr: false });
 
 export default function Home() {
   const { user, loading: authLoading } = useAuthGuard();
-  const { items, addItem, removeItem, updateQuantity, clearCart, getTotal } = useCartStore();
+  const { items, addItem, removeItem, updateQuantity, updatePrice, clearCart, getTotal } = useCartStore();
   
   const [showScanner, setShowScanner] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -45,6 +45,8 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
+  const [tempPrice, setTempPrice] = useState<string>("");
 
   // In-memory cache: barcode -> product (avoids repeated Firestore lookups)
   const productCacheRef = useRef<Map<string, Product | null>>(new Map());
@@ -83,10 +85,6 @@ export default function Home() {
       const cached = cache.get(barcode);
       if (cached) {
         addItem(cached);
-      } else {
-        setScannedBarcode(barcode);
-        setShowScanner(false);
-        setShowAddModal(true);
       }
       return;
     }
@@ -101,10 +99,29 @@ export default function Home() {
       cache.set(barcode, product); // cache it
       addItem(product);
     } else {
-      cache.set(barcode, null); // cache miss too
-      setScannedBarcode(barcode);
-      setShowScanner(false);
-      setShowAddModal(true);
+      // 3. Not found — simply add to Firestore and then add to cart natively
+      const newProductData = {
+        name: `Scanned Item (${barcode})`,
+        price: 0,
+        stock: 100, // Optional safe default
+        barcode: barcode,
+      };
+
+      try {
+        const docRef = await addDoc(collection(db, "products"), {
+          ...newProductData,
+          createdAt: serverTimestamp(),
+        });
+        const newProduct = { 
+          id: docRef.id, 
+          ...newProductData,
+          createdAt: new Date().toISOString() // or you can use serverTimestamp though Date works locally for type
+        } as unknown as Product;
+        cache.set(barcode, newProduct);
+        addItem(newProduct);
+      } catch (err) {
+        console.error("Failed to quickly add scanned product to firestore", err);
+      }
     }
   }, [addItem]);
 
@@ -280,9 +297,51 @@ export default function Home() {
                   {items.length > 0 ? (
                     items.map((item) => (
                       <div key={item.id} className="flex flex-col rounded-xl border border-slate-100 p-3 bg-slate-50/50">
-                        <div className="flex justify-between mb-2">
-                           <p className="font-bold text-slate-800 line-clamp-1">{item.name}</p>
-                           <p className="font-bold text-blue-600 text-sm whitespace-nowrap ml-2">${(item.price * item.quantity).toFixed(2)}</p>
+                        <div className="flex justify-between items-start mb-2 gap-2">
+                           <p className="font-bold text-slate-800 line-clamp-2 leading-tight">{item.name}</p>
+                           <div className="flex flex-col items-end">
+                              <p className="font-bold text-blue-600 text-sm whitespace-nowrap">${(item.price * item.quantity).toFixed(2)}</p>
+                              
+                              {/* Inline price edit for manually adjusting newly added $0 items */}
+                              {editingPriceId === item.id ? (
+                                <div className="flex items-center gap-1 mt-1">
+                                  <span className="text-xs text-slate-500">$</span>
+                                  <input 
+                                    type="number" 
+                                    autoFocus
+                                    className="w-16 px-1 py-0.5 text-xs border border-blue-300 rounded outline-none"
+                                    value={tempPrice}
+                                    onChange={(e) => setTempPrice(e.target.value)}
+                                    onBlur={() => {
+                                      const newPrice = parseFloat(tempPrice);
+                                      if (!isNaN(newPrice) && newPrice >= 0) {
+                                        updatePrice(item.id, newPrice);
+                                      }
+                                      setEditingPriceId(null);
+                                    }}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        const newPrice = parseFloat(tempPrice);
+                                        if (!isNaN(newPrice) && newPrice >= 0) {
+                                          updatePrice(item.id, newPrice);
+                                        }
+                                        setEditingPriceId(null);
+                                      }
+                                    }}
+                                  />
+                                </div>
+                              ) : (
+                                <p 
+                                  className="text-[10px] text-slate-400 cursor-pointer hover:text-blue-500 hover:underline mt-0.5"
+                                  onClick={() => {
+                                    setTempPrice(item.price.toString());
+                                    setEditingPriceId(item.id);
+                                  }}
+                                >
+                                  @{item.price.toFixed(2)} /ea
+                                </p>
+                              )}
+                           </div>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
