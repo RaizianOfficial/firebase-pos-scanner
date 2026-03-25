@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Firebase POS Scanner (No Hardware Needed)
 
-## Getting Started
+A fast, mobile-first **Point of Sale (POS)** system with barcode scanning — built using **Next.js + Firebase**.
 
-First, run the development server:
+Scan products → auto add to cart → generate bill → download receipt.
+All from your phone. No expensive machines needed.
+
+---
+
+## 🎥 Demo
+
+> Scan → Add → Bill → Done ⚡
+> (Add a GIF or short video here showing full flow)
+
+---
+
+## ✨ Features
+
+* 📷 Barcode Scanner (real-time)
+* 🛒 Smart Cart (auto quantity update)
+* 🧾 Billing System (instant total)
+* 📄 PDF Receipt Generator
+* 🔐 Admin Dashboard (add/edit/delete products)
+* 🔥 Firebase Backend (real-time + scalable)
+* 📱 Mobile-first design (shop-friendly)
+
+---
+
+## ⚡ Use Cases
+
+* 🏪 Kirana Stores
+* 🏋️ Gyms (supplements billing)
+* 💊 Medical Shops
+* 🛍️ Small Retail Businesses
+
+---
+
+## 🛠️ Tech Stack
+
+* **Frontend:** Next.js + Tailwind CSS
+* **Backend:** Firebase (Firestore + Auth)
+* **Scanner:** html5-qrcode
+* **PDF:** jsPDF
+
+---
+
+## 🚀 Quick Start
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔐 Firebase Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Go to Firebase Console
+2. Create a new project
+3. Enable Firestore Database
+4. Enable Authentication (Email/Password)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🔑 Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a `.env.local` file:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📦 Firestore Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### products
+
+* barcode (string)
+* name (string)
+* price (number)
+
+### sales
+
+* totalAmount
+* createdAt
+
+### items (subcollection)
+
+* name
+* price
+* quantity
+
+---
+
+## 🧠 How It Works
+
+1. Scan barcode 📷
+2. Fetch product from Firebase
+3. Add to cart 🛒
+4. Click "Generate Bill"
+5. Receipt generated 🧾
+
+---
+
+## 🗺️ Roadmap
+
+* [ ] Multi-shop support
+* [ ] Analytics dashboard
+* [ ] WhatsApp receipt sharing
+* [ ] Offline mode
+* [ ] Thermal printer integration
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+* Fork the repo
+* Create a new branch
+* Submit a pull request
+
+---
+
+## ⭐ Support
+
+If you find this project useful:
+
+👉 Star this repo
+👉 Follow me for more projects
+
+---
+
+## 🧑‍💻 Author
+
+Built by **Sunny (Raizian)**
+🚀 Building real-world tools & systems
+
+---
+
+## 📜 License
+
+MIT License — free to use and modify.
