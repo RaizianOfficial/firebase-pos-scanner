@@ -141,7 +141,7 @@ If you find this project useful:
 
 ## 🧑‍💻 Author
 
-Built by **Sunny (Raizian)**
+Built by **Sunny Rawat (Raizian)**
 🚀 Building real-world tools & systems
 
 ---
