@@ -62,7 +62,7 @@ export default function AddProductModal({
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
         <div className="mb-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <PackagePlus className="text-blue-600" size={24} />
+            <PackagePlus className="text-black" size={24} />
             <h2 className="text-xl font-bold text-slate-900">Add New Product</h2>
           </div>
           <button onClick={onClose} className="rounded-full p-2 hover:bg-slate-100 transition-colors">
@@ -76,7 +76,7 @@ export default function AddProductModal({
             <input
               type="text"
               required
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 font-medium focus:border-blue-500 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2 font-medium focus:border-black focus:outline-none transition-colors"
               value={barcode}
               readOnly={!!initialBarcode}
               onChange={(e) => setBarcode(e.target.value)}
@@ -88,7 +88,7 @@ export default function AddProductModal({
               type="text"
               required
               placeholder="e.g. Coca Cola 500ml"
-              className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-blue-500 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-black focus:outline-none transition-colors"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -100,7 +100,7 @@ export default function AddProductModal({
               step="0.01"
               required
               placeholder="0.00"
-              className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-blue-500 focus:outline-none transition-colors"
+              className="w-full rounded-lg border border-slate-200 px-4 py-2 focus:border-black focus:outline-none transition-colors"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
@@ -111,7 +111,7 @@ export default function AddProductModal({
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 font-bold text-white transition-all hover:bg-blue-700 disabled:bg-blue-300"
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-black py-3 font-bold text-white transition-all hover:bg-neutral-800 disabled:bg-neutral-300"
           >
             {loading ? "Adding..." : <><Plus size={20} /> Create Product</>}
           </button>

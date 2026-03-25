@@ -283,7 +283,7 @@ export default function Home() {
   };
 
   if (authLoading) return <div className="flex h-screen items-center justify-center bg-slate-50">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-600"></div>
+    <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-black"></div>
   </div>;
 
   return (
@@ -298,18 +298,18 @@ export default function Home() {
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                <div className="flex flex-col sm:flex-row gap-4 items-center">
                   <div className="relative flex-1 group w-full">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neutral-600 transition-colors" size={20} />
                     <input
                       type="text"
                       placeholder="Search items by name..."
-                      className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-4 outline-none focus:border-blue-500 bg-slate-50 transition-all font-medium"
+                      className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-4 outline-none focus:border-black bg-slate-50 transition-all font-medium"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
                   <button
                     onClick={() => setShowScanner(true)}
-                    className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-bold text-white transition-all hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-200"
+                    className="flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-black px-6 py-3 font-bold text-white transition-all hover:bg-neutral-800 active:scale-95 shadow-lg shadow-neutral-300"
                   >
                     <Scan size={20} /> SCAN BARCODE
                   </button>
@@ -327,14 +327,14 @@ export default function Home() {
                   {searchResults.map((product) => (
                     <div
                       key={product.id}
-                      className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-100 p-4 transition-all hover:border-blue-200 hover:bg-blue-50/50 group"
+                      className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-100 p-4 transition-all hover:border-black hover:bg-neutral-100/50 group"
                       onClick={() => addItem(product)}
                     >
                       <div>
-                        <p className="font-bold text-slate-900 group-hover:text-blue-700 mb-0.5">{product.name}</p>
-                        <p className="text-sm font-semibold text-blue-600">${product.price.toFixed(2)}</p>
+                        <p className="font-bold text-slate-900 group-hover:text-neutral-800 mb-0.5">{product.name}</p>
+                        <p className="text-sm font-semibold text-black">${product.price.toFixed(2)}</p>
                       </div>
-                      <Plus className="text-slate-300 group-hover:text-blue-600" size={20} />
+                      <Plus className="text-slate-300 group-hover:text-black" size={20} />
                     </div>
                   ))}
                 </div>
@@ -355,10 +355,10 @@ export default function Home() {
              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col h-full">
                 <div className="p-6 border-b border-slate-100 flex items-center justify-between">
                    <div className="flex items-center gap-2">
-                       <ShoppingCart className="text-blue-600" size={22} />
+                       <ShoppingCart className="text-black" size={22} />
                        <h2 className="text-xl font-bold text-slate-900">Cart</h2>
                    </div>
-                   <span className="bg-blue-100 text-blue-700 px-3 py-0.5 rounded-full text-sm font-bold">
+                   <span className="bg-neutral-200 text-neutral-800 px-3 py-0.5 rounded-full text-sm font-bold">
                       {items.reduce((acc, item) => acc + item.quantity, 0)} items
                    </span>
                 </div>
@@ -370,7 +370,7 @@ export default function Home() {
                         <div className="flex justify-between items-start mb-2 gap-2">
                            <p className="font-bold text-slate-800 line-clamp-2 leading-tight">{item.name}</p>
                            <div className="flex flex-col items-end">
-                              <p className="font-bold text-blue-600 text-sm whitespace-nowrap">${(item.price * item.quantity).toFixed(2)}</p>
+                              <p className="font-bold text-black text-sm whitespace-nowrap">${(item.price * item.quantity).toFixed(2)}</p>
                               
                               {/* Inline price edit for manually adjusting newly added $0 items */}
                               {editingPriceId === item.id ? (
@@ -379,7 +379,7 @@ export default function Home() {
                                   <input 
                                     type="number" 
                                     autoFocus
-                                    className="w-16 px-1 py-0.5 text-xs border border-blue-300 rounded outline-none"
+                                    className="w-16 px-1 py-0.5 text-xs border border-black rounded outline-none"
                                     value={tempPrice}
                                     onChange={(e) => setTempPrice(e.target.value)}
                                     onBlur={() => {
@@ -402,7 +402,7 @@ export default function Home() {
                                 </div>
                               ) : (
                                 <p 
-                                  className="text-[10px] text-slate-400 cursor-pointer hover:text-blue-500 hover:underline mt-0.5"
+                                  className="text-[10px] text-slate-400 cursor-pointer hover:text-neutral-600 hover:underline mt-0.5"
                                   onClick={() => {
                                     setTempPrice(item.price.toString());
                                     setEditingPriceId(item.id);
@@ -424,7 +424,7 @@ export default function Home() {
                             <span className="font-bold text-slate-700 min-w-[20px] text-center">{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="rounded-lg bg-white p-1 hover:bg-blue-50 hover:text-blue-500 border border-slate-100 shadow-sm transition-all"
+                              className="rounded-lg bg-white p-1 hover:bg-neutral-100 hover:text-neutral-600 border border-slate-100 shadow-sm transition-all"
                             >
                               <Plus size={14} />
                             </button>
@@ -528,7 +528,7 @@ export default function Home() {
                </button>
                <button 
                  onClick={() => currentReceiptDoc?.autoPrint({variant: 'javascript'})}
-                 className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-blue-200"
+                 className="flex items-center gap-2 px-6 py-2.5 bg-black hover:bg-neutral-800 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-neutral-300"
                >
                  <Printer size={18} /> Print Final Bill
                </button>

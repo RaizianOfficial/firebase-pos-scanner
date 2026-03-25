@@ -23,9 +23,9 @@ body {
 }
 
 .pos-btn-primary {
-  @apply bg-blue-600 text-white font-bold px-6 py-3 rounded-xl transition-all hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100;
+  @apply bg-black text-white font-bold px-6 py-3 rounded-xl transition-all hover:bg-neutral-800 active:scale-95 shadow-lg shadow-neutral-200;
 }
 
 .pos-input {
-  @apply w-full rounded-xl border border-slate-200 py-3 px-4 outline-none focus:border-blue-500 bg-slate-50 transition-all font-medium;
+  @apply w-full rounded-xl border border-slate-200 py-3 px-4 outline-none focus:border-black bg-slate-50 transition-all font-medium;
 }

@@ -35,7 +35,7 @@ export function Navigation() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 justify-between items-center">
           <div className="flex items-center gap-8">
-            <h1 className="text-xl font-extrabold text-blue-600 tracking-tight">POINT-OF-SALE</h1>
+            <h1 className="text-xl font-extrabold text-black tracking-tight">POINT-OF-SALE</h1>
             <div className="hidden sm:flex sm:space-x-4">
               {navItems.map((item) => (
                 <Link
@@ -43,7 +43,7 @@ export function Navigation() {
                   href={item.href}
                   className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     pathname === item.href
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-neutral-100 text-neutral-800"
                       : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
                   }`}
                 >

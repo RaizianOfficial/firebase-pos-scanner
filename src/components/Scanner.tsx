@@ -71,7 +71,7 @@ export default function Scanner({ onScan, onClose }: ScannerProps) {
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 p-4">
           <div className="flex items-center gap-2">
-            <Camera className="text-blue-600" size={20} />
+            <Camera className="text-black" size={20} />
             <h2 className="font-semibold text-slate-800">Scan Barcode</h2>
           </div>
           <button
@@ -88,8 +88,8 @@ export default function Scanner({ onScan, onClose }: ScannerProps) {
 
           {/* Instant feedback overlay */}
           {status === "scanning" && (
-            <div className="absolute inset-4 flex items-center justify-center rounded-lg bg-blue-500/20 backdrop-blur-[2px]">
-              <div className="flex flex-col items-center gap-2 text-blue-700">
+            <div className="absolute inset-4 flex items-center justify-center rounded-lg bg-neutral-1000/20 backdrop-blur-[2px]">
+              <div className="flex flex-col items-center gap-2 text-neutral-800">
                 <Loader2 size={36} className="animate-spin" />
                 <span className="font-semibold text-sm">Looking up product…</span>
               </div>

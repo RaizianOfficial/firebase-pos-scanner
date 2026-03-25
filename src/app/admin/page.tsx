@@ -96,7 +96,7 @@ export default function AdminPage() {
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3 self-start sm:self-center">
-            <div className="bg-blue-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-100">
+            <div className="bg-black p-2.5 rounded-xl text-white shadow-lg shadow-neutral-200">
                <Package size={24} />
             </div>
             <div>
@@ -106,7 +106,7 @@ export default function AdminPage() {
           </div>
           <button
             onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-bold text-white transition-all hover:bg-blue-700 active:scale-95 shadow-xl shadow-blue-100 w-full sm:w-auto justify-center"
+            className="flex items-center gap-2 rounded-xl bg-black px-6 py-3 font-bold text-white transition-all hover:bg-neutral-800 active:scale-95 shadow-xl shadow-neutral-200 w-full sm:w-auto justify-center"
           >
             <PlusCircle size={20} /> ADD PRODUCT
           </button>
@@ -114,11 +114,11 @@ export default function AdminPage() {
 
         <div className="mb-6 bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
           <div className="relative group max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-neutral-600 transition-colors" size={20} />
             <input
               type="text"
               placeholder="Search by name or barcode..."
-              className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-4 outline-none focus:border-blue-500 bg-slate-50 transition-all font-medium"
+              className="w-full rounded-xl border border-slate-200 py-3 pl-10 pr-4 outline-none focus:border-black bg-slate-50 transition-all font-medium"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -147,7 +147,7 @@ export default function AdminPage() {
                       {editingId === p.id ? (
                         <input
                           type="text"
-                          className="w-full rounded-lg border border-blue-200 px-3 py-1.5 outline-none focus:border-blue-500 bg-blue-50/50 font-medium"
+                          className="w-full rounded-lg border border-black px-3 py-1.5 outline-none focus:border-black bg-neutral-100/50 font-medium"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
                         />
@@ -165,13 +165,13 @@ export default function AdminPage() {
                            <input
                             type="number"
                             step="0.01"
-                            className="w-24 rounded-lg border border-blue-200 pl-6 pr-3 py-1.5 outline-none focus:border-blue-500 bg-blue-50/50 font-medium"
+                            className="w-24 rounded-lg border border-black pl-6 pr-3 py-1.5 outline-none focus:border-black bg-neutral-100/50 font-medium"
                             value={editPrice}
                             onChange={(e) => setEditPrice(e.target.value)}
                            />
                         </div>
                       ) : (
-                        <span className="font-bold text-blue-600">${p.price.toFixed(2)}</span>
+                        <span className="font-bold text-black">${p.price.toFixed(2)}</span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -195,7 +195,7 @@ export default function AdminPage() {
                           <>
                             <button
                               onClick={() => handleEditStart(p)}
-                              className="rounded-lg bg-slate-50 p-2 text-slate-400 shadow-sm border border-slate-100 transition-all hover:bg-blue-50 hover:text-blue-600 hover:border-blue-100 opacity-0 group-hover:opacity-100"
+                              className="rounded-lg bg-slate-50 p-2 text-slate-400 shadow-sm border border-slate-100 transition-all hover:bg-neutral-100 hover:text-black hover:border-black opacity-0 group-hover:opacity-100"
                             >
                               <Edit size={18} />
                             </button>

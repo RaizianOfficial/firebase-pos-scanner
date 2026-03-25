@@ -31,7 +31,7 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl border border-slate-100">
         <div className="mb-8 flex flex-col items-center">
-          <div className="mb-4 rounded-full bg-blue-600 p-3 text-white">
+          <div className="mb-4 rounded-full bg-black p-3 text-white">
             <LogIn size={32} />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Sign in to POS</h1>
@@ -44,7 +44,7 @@ export default function LoginPage() {
             <input
               type="email"
               required
-              className="w-full rounded-lg border border-slate-200 px-4 py-2 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-slate-200 px-4 py-2 outline-none focus:border-black"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -54,7 +54,7 @@ export default function LoginPage() {
             <input
               type="password"
               required
-              className="w-full rounded-lg border border-slate-200 px-4 py-2 outline-none focus:border-blue-500"
+              className="w-full rounded-lg border border-slate-200 px-4 py-2 outline-none focus:border-black"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -65,7 +65,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700 disabled:bg-blue-300"
+            className="w-full rounded-lg bg-black py-3 font-semibold text-white transition-colors hover:bg-neutral-800 disabled:bg-neutral-300"
           >
             {loading ? "Signing in..." : "Login"}
           </button>
