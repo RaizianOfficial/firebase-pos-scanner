@@ -189,18 +189,23 @@ export default function Home() {
       // Execute transaction completely before generating receipt
       await batch.commit();
 
-      // 3. Generate Thermal Receipt and load into UI Modal instead of auto-downloading immediately 
-      const pdfDoc = generateReceipt(saleId, snapItems, currentTotal);
-      setCurrentReceiptDoc(pdfDoc);
-      // Wait to create the blob URL for the iframe preview
-      const pdfUrl = pdfDoc.output("bloburl") as unknown as string; // ts typing cast
-      setReceiptPdfUrl(pdfUrl);
+      try {
+        // 3. Generate Thermal Receipt and load into UI Modal instead of auto-downloading immediately 
+        const pdfDoc = generateReceipt(saleId, snapItems, currentTotal);
+        setCurrentReceiptDoc(pdfDoc);
+        // datauristring is widely supported in iframes across all browsers
+        const pdfUrl = pdfDoc.output("datauristring") as unknown as string;
+        setReceiptPdfUrl(pdfUrl);
+      } catch (pdfErr) {
+        console.error("PDF Generation error:", pdfErr);
+        alert("Bill saved, but receipt generation failed. " + String(pdfErr));
+      }
 
       // 4. Clear Cart on success ONLY
       clearCart();
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Error processing sale! Please check your connection.");
+      alert(`Checkout Error: ${err?.message || "Please check your database connection or rules."}`);
     } finally {
       setProcessing(false);
     }
@@ -243,11 +248,14 @@ export default function Home() {
     // Items
     let y = 54;
     printedItems.forEach((item) => {
-      let nameStr = item.name.substring(0, 16); // limit length for thermal realism
+      let itemName = typeof item.name === "string" ? item.name : "Unknown Item";
+      let nameStr = itemName.substring(0, 16); // limit length for thermal realism
       doc.text(nameStr, 4, y);
       
-      doc.text(item.quantity.toString(), 48, y, { align: "center" });
-      const itemTotal = (item.price * item.quantity).toFixed(2);
+      const qty = item.quantity || 1;
+      const price = item.price || 0;
+      doc.text(qty.toString(), 48, y, { align: "center" });
+      const itemTotal = (price * qty).toFixed(2);
       doc.text(`$${itemTotal}`, 76, y, { align: "right" });
       y += 6;
     });
