@@ -16,6 +16,6 @@ git push
 
 echo.
 echo ✅ Done! Vercel is now deploying automatically.
-echo 🌐 Check: https://vercel.com/raizianofficial/ai-billing-app
+echo 🌐 Check: https://vercel.com/raizianofficial/ai-barcode-billing-system
 echo.
 pause
