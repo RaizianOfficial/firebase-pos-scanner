@@ -15,10 +15,11 @@ import {
   Receipt,
   ShoppingCart,
   ChevronRight,
-  PackageSearch,
   Loader2,
   Printer,
-  Download
+  Download,
+  CheckCircle,
+  PackageSearch
 } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { 
@@ -52,6 +53,12 @@ export default function Home() {
   const [tempPrice, setTempPrice] = useState<string>("");
   const [receiptPdfUrl, setReceiptPdfUrl] = useState<string | null>(null);
   const [currentReceiptDoc, setCurrentReceiptDoc] = useState<jsPDF | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = useCallback((msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  }, []);
 
   // In-memory cache: barcode -> product (avoids repeated Firestore lookups)
   const productCacheRef = useRef<Map<string, Product | null>>(new Map());
@@ -114,8 +121,8 @@ export default function Home() {
       const cached = cache.get(barcode);
       if (cached) {
         addItem(cached);
+        return true;
       }
-      return;
     }
 
     // 2. Not cached — query Firestore
@@ -127,30 +134,13 @@ export default function Home() {
       const product = { id: docSnap.id, ...docSnap.data() } as Product;
       cache.set(barcode, product); // cache it
       addItem(product);
+      return true;
     } else {
-      // 3. Not found — simply add to Firestore and then add to cart natively
-      const newProductData = {
-        name: `Scanned Item (${barcode})`,
-        price: 0,
-        stock: 100, // Optional safe default
-        barcode: barcode,
-      };
-
-      try {
-        const docRef = await addDoc(collection(db, "products"), {
-          ...newProductData,
-          createdAt: serverTimestamp(),
-        });
-        const newProduct = { 
-          id: docRef.id, 
-          ...newProductData,
-          createdAt: new Date().toISOString() // or you can use serverTimestamp though Date works locally for type
-        } as unknown as Product;
-        cache.set(barcode, newProduct);
-        addItem(newProduct);
-      } catch (err) {
-        console.error("Failed to quickly add scanned product to firestore", err);
-      }
+      // 3. Not found — Show "Add New Product" Modal
+      setScannedBarcode(barcode);
+      setShowScanner(false);
+      setShowAddModal(true);
+      return false;
     }
   }, [addItem]);
 
@@ -328,7 +318,10 @@ export default function Home() {
                     <div
                       key={product.id}
                       className="flex cursor-pointer items-center justify-between rounded-xl border border-slate-100 p-4 transition-all hover:border-black hover:bg-neutral-100/50 group"
-                      onClick={() => addItem(product)}
+                      onClick={() => {
+                        addItem(product);
+                        showToast(`Added ${product.name} to cart`);
+                      }}
                     >
                       <div>
                         <p className="font-bold text-slate-900 group-hover:text-neutral-800 mb-0.5">{product.name}</p>
@@ -417,14 +410,14 @@ export default function Home() {
                           <div className="flex items-center gap-3">
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="rounded-lg bg-white p-1 hover:bg-red-50 hover:text-red-500 border border-slate-100 shadow-sm transition-all"
+                              className="rounded-lg bg-white p-1 hover:bg-red-50 hover:text-red-500 border border-slate-100 shadow-sm transition-transform active:scale-90"
                             >
                               <Minus size={14} />
                             </button>
-                            <span className="font-bold text-slate-700 min-w-[20px] text-center">{item.quantity}</span>
+                            <span className="font-bold text-slate-700 min-w-[20px] text-center animate-in zoom-in duration-200" key={item.quantity}>{item.quantity}</span>
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="rounded-lg bg-white p-1 hover:bg-neutral-100 hover:text-neutral-600 border border-slate-100 shadow-sm transition-all"
+                              className="rounded-lg bg-white p-1 hover:bg-neutral-100 hover:text-neutral-600 border border-slate-100 shadow-sm transition-transform active:scale-90"
                             >
                               <Plus size={14} />
                             </button>
@@ -448,8 +441,10 @@ export default function Home() {
 
                 <div className="p-6 bg-slate-50 border-t border-slate-200 rounded-b-2xl">
                    <div className="flex justify-between items-center mb-6">
-                      <span className="text-slate-500 font-semibold uppercase tracking-wider text-xs">Total Amount</span>
-                      <span className="text-3xl font-black text-slate-900">${getTotal().toFixed(2)}</span>
+                      <span className="text-slate-500 font-semibold uppercase tracking-wider text-xs">Payable Amount</span>
+                      <span key={getTotal()} className="text-4xl font-extrabold text-slate-900 animate-in slide-in-from-bottom-2 fade-in duration-300">
+                        ${getTotal().toFixed(2)}
+                      </span>
                    </div>
                     <button
                      onClick={handleCheckout}
@@ -485,6 +480,7 @@ export default function Home() {
           onSuccess={(product) => {
             addItem(product);
             setShowAddModal(false);
+            showToast("New product created");
           }}
           onClose={() => setShowAddModal(false)}
         />
@@ -521,19 +517,27 @@ export default function Home() {
 
             <div className="p-4 bg-white border-t border-slate-200 flex justify-end gap-3">
                <button 
+                 onClick={() => currentReceiptDoc?.autoPrint({variant: 'javascript'})}
+                 className="flex items-center gap-2 px-6 py-2.5 bg-transparent border-2 border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-xl text-sm transition-all"
+               >
+                 <Printer size={18} /> Print Receipt
+               </button>
+               <button 
                  onClick={() => currentReceiptDoc?.save("receipt.pdf")}
-                 className="flex items-center gap-2 px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold rounded-xl text-sm transition-all"
+                 className="flex items-center gap-2 px-6 py-2.5 bg-black hover:bg-neutral-800 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-neutral-300"
                >
                  <Download size={18} /> Download PDF
                </button>
-               <button 
-                 onClick={() => currentReceiptDoc?.autoPrint({variant: 'javascript'})}
-                 className="flex items-center gap-2 px-6 py-2.5 bg-black hover:bg-neutral-800 text-white font-semibold rounded-xl text-sm transition-all shadow-lg shadow-neutral-300"
-               >
-                 <Printer size={18} /> Print Final Bill
-               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Global Toast Notification */}
+      {toastMessage && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100] bg-slate-900 border border-slate-700 text-white px-6 py-3 rounded-full shadow-2xl shadow-slate-900/50 font-bold text-sm flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+           {toastMessage.toLowerCase().includes("created") ? <CheckCircle size={18} className="text-green-400" /> : <ShoppingCart size={18} className="text-white" />}
+           {toastMessage}
         </div>
       )}
 

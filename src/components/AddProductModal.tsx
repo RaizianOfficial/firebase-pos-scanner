@@ -28,17 +28,24 @@ export default function AddProductModal({
     setLoading(true);
     setError("");
 
-    if (!name || !price || !barcode) {
+    if (!name.trim() || !price || !barcode.trim()) {
       setError("All fields are required");
+      setLoading(false);
+      return;
+    }
+
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice <= 0) {
+      setError("Price must be a valid number greater than 0");
       setLoading(false);
       return;
     }
 
     try {
       const productData = {
-        name,
-        price: parseFloat(price),
-        barcode,
+        name: name.trim(),
+        price: parsedPrice,
+        barcode: barcode.trim(),
         createdAt: serverTimestamp(),
       };
 

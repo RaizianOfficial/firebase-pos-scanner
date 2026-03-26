@@ -29,3 +29,14 @@ body {
 .pos-input {
   @apply w-full rounded-xl border border-slate-200 py-3 px-4 outline-none focus:border-black bg-slate-50 transition-all font-medium;
 }
+
+@keyframes scan-animation {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.scanner-line {
+  animation: scan-animation 2.5s ease-in-out infinite;
+}
